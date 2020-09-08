@@ -1,0 +1,13 @@
+{
+  "name": "com.vintecc.tortoisegit-for-unity",
+  "version": "0.0.1",
+  "displayName": "TortoiseGit for Unity",
+  "description": "This package extends the Unity Editor with function calls to TortoiseGit.",
+  "unity": "2019.3",
+  "author": {
+    "name": "Vintecc",
+    "email": "support@vintecc.com",
+    "url": "https://www.vintecc.com"
+  },
+  "hideInEditor": false
+}
