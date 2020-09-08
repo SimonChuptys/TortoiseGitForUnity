@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-
 namespace Vintecc.TortoiseGitForUnity
 {
     public static class TortoiseGitRunner

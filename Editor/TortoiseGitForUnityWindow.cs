@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Vintecc.TortoiseGitForUnity.UserInterface
 {
-    public class GitFunctionsWindow : EditorWindow
+    public class TortoiseGitForUnityWindow : EditorWindow
     {
         // .. FIELDS
 
@@ -28,10 +28,10 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
 
         // .. INITIALIZATION
 
-        [MenuItem("Vintecc/TortoiseGitForUnity/Git Commands Window")]
+        [MenuItem("Tools/TortoiseGit for Unity")]
         public static void ShowWindow()
         {
-            var w = GetWindow(typeof(GitFunctionsWindow)) as GitFunctionsWindow;
+            var w = GetWindow(typeof(TortoiseGitForUnityWindow)) as TortoiseGitForUnityWindow;
             var gitIcon = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + "TortoiseGit.png", typeof(Texture2D));
             w.titleContent = new GUIContent("TortoiseGit for Unity", gitIcon, "TortoiseGit for Unity");
             w.minSize = new Vector2(BtnWidth * 3 + RepoDropdownMinWidth, 25);
@@ -66,7 +66,7 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
             /*if(GUILayout.Button("test"))
                 RefreshRepositories();*/
             
-            GUILayout.Space(5);
+            GUILayout.Space(10);
             GUILayout.BeginHorizontal();
 
             selectedRepositoryIndex = EditorGUILayout.Popup("", selectedRepositoryIndex, repositoryPaths, repoDropdownMinWidth);
