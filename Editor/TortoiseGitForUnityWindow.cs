@@ -137,7 +137,9 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
 
         private string GetSelectedRepositoryPath()
         {
-            return Path.GetFullPath("Packages/TortoiseGitForUnity");
+            if (repositoryPaths == null || selectedRepositoryIndex >= repositoryPaths.Length)
+                return string.Empty;
+            return repositoryPaths[selectedRepositoryIndex];
         }
     }
 }

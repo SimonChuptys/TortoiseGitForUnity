@@ -4,6 +4,7 @@ All notable changes to this package will be documented in this file. The format 
 ## [1.0.1] - 2020-09-08
 ### Fixes
 - Fixed repository discovery on Unity Editor restart
+- Fixed incorrect repository path handling when executing commands
 
 ## [1.0.0] - 2020-09-08
 First release!
