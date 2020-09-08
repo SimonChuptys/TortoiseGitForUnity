@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace Vintecc.TortoiseGitForUnity.UserInterface
@@ -8,7 +9,7 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
         // .. FIELDS
 
         private const string AssetPath = "Packages/com.vintecc.tortoisegit-for-unity/Editor Resources/";
-        
+
         private string[] repositories = new string[0];
         private int selectedRepositoryIndex = 0;
 
@@ -26,18 +27,18 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
         public static void ShowWindow()
         {
             var w = GetWindow(typeof(GitFunctionsWindow)) as GitFunctionsWindow;
-            
+
             var gitIcon = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + "TortoiseGit.png", typeof(Texture2D));
             w.titleContent = new GUIContent("TortoiseGit for Unity", gitIcon, "TortoiseGit for Unity");
-            
+
             w.minSize = new Vector2(35 * 3 + 100, 25);
-            
+
             w.RefreshRepositories();
         }
 
         private void InitResources()
         {
-            if(btnWidth != null)
+            if (btnWidth != null)
                 return;
 
             var logTex = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + "ShowLog_Light.png", typeof(Texture2D));
@@ -64,16 +65,13 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
             selectedRepositoryIndex = EditorGUILayout.Popup("", selectedRepositoryIndex, repositories);
 
             if (GUILayout.Button(logIcon, btnWidth, btnHeight))
-            {
-            }
+                TortoiseGitRunner.Do(TortoiseGitRunner.Command.Log, GetSelectedRepositoryPath());
 
             if (GUILayout.Button(commitIcon, btnWidth, btnHeight))
-            {
-            }
+                TortoiseGitRunner.Do(TortoiseGitRunner.Command.Commit, GetSelectedRepositoryPath());
 
             if (GUILayout.Button(fetchIcon, btnWidth, btnHeight))
-            {
-            }
+                TortoiseGitRunner.Do(TortoiseGitRunner.Command.Fetch, GetSelectedRepositoryPath());
 
             GUILayout.EndHorizontal();
         }
@@ -88,5 +86,9 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
             };
         }
 
+        private string GetSelectedRepositoryPath()
+        {
+            return Path.GetFullPath("Packages/TortoiseGitForUnity");
+        }
     }
 }
