@@ -55,6 +55,8 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
             repoDropdownMinWidth = GUILayout.MinWidth(RepoDropdownMinWidth);
             btnWidth = GUILayout.Width(BtnWidth);
             btnHeight = GUILayout.Height(20);
+            
+            RefreshRepositories();
         }
 
         // .. OPERATIONS
