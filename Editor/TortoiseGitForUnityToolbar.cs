@@ -61,7 +61,7 @@ namespace Vintecc.TortoiseGitForUnity
             }
         }
         
-        private static TortoiseGitForUnityWindow window;
+        private static TortoiseGitForUnityToolbar window;
 
         // .. INITIALIZATION
 
@@ -93,7 +93,7 @@ namespace Vintecc.TortoiseGitForUnity
             
             if (isVisible && isWindowNull)
             {
-                window = new TortoiseGitForUnityWindow();
+                window = new TortoiseGitForUnityToolbar();
                 ToolbarExtender.LeftToolbarGUI.Add(window.OnToolBarGUI);
             }
             else if (!isVisible && !isWindowNull)
@@ -104,7 +104,7 @@ namespace Vintecc.TortoiseGitForUnity
         }
     }
 
-    internal class TortoiseGitForUnityWindow
+    public class TortoiseGitForUnityToolbar
     {
         // .. FIELDS
 
@@ -121,7 +121,7 @@ namespace Vintecc.TortoiseGitForUnity
 
         // .. INITIALIZATION
 
-        public TortoiseGitForUnityWindow()
+        public TortoiseGitForUnityToolbar()
         {
             InitResources();
             RefreshRepositories();
