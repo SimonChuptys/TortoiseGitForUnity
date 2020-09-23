@@ -177,7 +177,7 @@ namespace Vintecc.TortoiseGitForUnity
             const string refreshRepos = "Scan for repositories...";
             if (storedRepos == NoReposValue)
             {
-                repositoryPaths = new string[] {refreshRepos};
+                repositoryPaths = new string[] {NoReposValue, refreshRepos};
                 return;
             }
             
