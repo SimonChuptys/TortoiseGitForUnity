@@ -144,7 +144,7 @@ namespace Vintecc.TortoiseGitForUnity
 
         private void RefreshRepositories()
         {
-            var storedRepos = EditorPrefs.GetString(RepositoryListKey, string.Empty);
+            var storedRepos = PlayerPrefs.GetString(RepositoryListKey, string.Empty);
 
             if (string.IsNullOrEmpty(storedRepos))
             {
@@ -172,7 +172,7 @@ namespace Vintecc.TortoiseGitForUnity
                 if (string.IsNullOrEmpty(storedRepos))
                     storedRepos = NoReposValue;
 
-                EditorPrefs.SetString(RepositoryListKey, storedRepos);
+                PlayerPrefs.SetString(RepositoryListKey, storedRepos);
             }
 
             if (storedRepos == NoReposValue)
