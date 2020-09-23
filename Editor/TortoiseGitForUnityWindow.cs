@@ -9,112 +9,81 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
 {
     static class ToolbarStyles
     {
-        public static readonly GUIStyle commandLabelStyle;
-        public static readonly GUIStyle commandButtonStyleMid;
-        public static readonly GUIStyle commandButtonStyleLeft;
-        public static readonly GUIStyle commandButtonStyleRight;
-
-        public static readonly GUIStyle commandMiniPopupStyle;
+        public static readonly GUIStyle CommandButtonStyleMid;
+        public static readonly GUIStyle CommandButtonStyleLeft;
+        public static readonly GUIStyle CommandButtonStyleRight;
+        public static readonly GUIStyle CommandMiniPopupStyle;
         
-        private const float height = 22;
-        private const float width = 34;
-        private const int padding = 2;
+        private const float Height = 20;
+        private const float Width = 34;
+        private const int Padding = 3;
 
         static ToolbarStyles()
         {
-            var pd = new RectOffset(padding, padding, padding, padding);
-            var margin = new RectOffset(0, 0, 3, 0);
-            var h = height - 3;
+            var pd = new RectOffset(Padding, Padding, Padding, Padding);
 
-            commandLabelStyle = new GUIStyle()
+            CommandButtonStyleMid = new GUIStyle("AppCommandMid")
             {
-                fixedHeight = h,
-                alignment = TextAnchor.MiddleCenter,
-                margin = new RectOffset(0, 0, 2, 0),
-            };
-
-            commandButtonStyleMid = new GUIStyle(EditorStyles.toolbarButton)
-            {
-                fixedHeight = h,
-                fixedWidth = width,
                 padding = pd,
-                margin = margin,
-                /*fontSize = 16,
-                alignment = TextAnchor.MiddleCenter,
-                imagePosition = ImagePosition.ImageAbove,
-                fontStyle = FontStyle.Bold*/
-            };
-            commandButtonStyleLeft = new GUIStyle(EditorStyles.toolbarButton)
-            {
-                fixedHeight = h,
-                fixedWidth = width,
-                padding = pd,
-                margin = margin,
-            };
-            commandButtonStyleRight = new GUIStyle(EditorStyles.toolbarButton)
-            {
-                fixedHeight = h,
-                fixedWidth = width,
-                padding = pd,
-                margin = margin,
+                
             };
             
-            commandMiniPopupStyle = new GUIStyle(EditorStyles.toolbarPopup)
+            CommandButtonStyleLeft = new GUIStyle("AppCommandLeft")
             {
-                fixedHeight = h,
-                fixedWidth = 17,
-                margin = margin,
+                padding = pd,
+            };
+            CommandButtonStyleRight = new GUIStyle("AppCommandRight")
+            {
+                padding = pd,
+            };
+            
+            CommandMiniPopupStyle = new GUIStyle(/*EditorStyles.toolbarPopup*/"DropDown")
+            {
+                fixedHeight = 22,
+                fixedWidth = 20,
             };
         }
     }
 
-    [InitializeOnLoad]
-    public class TortoiseGitForUnityLoader
+    public static class TortoiseGitForUnityLoader
     {
         // .. FIELDS
 
-        private const string TortoiseGitForUnityEnableMenuPath = "Tools/Enable TortoiseGitForUnity";
-        private const string TortoiseGitForUnityEnabledKey = "TortoiseGitForUnityEnabled";
-
-        private static bool Enabled
-        {
-            get => EditorPrefs.GetBool(TortoiseGitForUnityEnabledKey, false);
-            set
-            {
-                EditorPrefs.SetBool(TortoiseGitForUnityEnabledKey, value);
-                Menu.SetChecked(TortoiseGitForUnityEnableMenuPath, value);
-                UpdateEnabled();
-            }
-        }
+        private static bool show;
         private static TortoiseGitForUnityWindow window;
-
-        // .. INITIALIZATION
-
-        static TortoiseGitForUnityLoader()
-        {
-            UpdateEnabled();
-        }
 
         // .. OPERATIONS
 
-        private static void UpdateEnabled()
+        /// <summary>
+        /// Load and display TortoiseGitForUnity
+        /// </summary>
+        public static void Show()
         {
-            if (Enabled && window == null)
-            {
-                window = new TortoiseGitForUnityWindow();
-                ToolbarExtender.RightToolbarGUI.Add(window.OnToolBarGUI);
-            }
-            else if (!Enabled && window != null)
-            {
-                ToolbarExtender.RightToolbarGUI.Remove(window.OnToolBarGUI);
-                window = null;
-            }
+            show = true;
+            UpdateVisibility();
         }
 
-        [MenuItem(TortoiseGitForUnityEnableMenuPath)]
-        private static void Toggle()
+        /// <summary>
+        /// Hide and unload TortoiseGitForUnity
+        /// </summary>
+        public static void Hide()
         {
-            Enabled = !Enabled;
+            show = false;
+            UpdateVisibility();
+        }
+        
+        private static void UpdateVisibility()
+        {
+            if (show && window == null)
+            {
+                window = new TortoiseGitForUnityWindow();
+                ToolbarExtender.LeftToolbarGUI.Add(window.OnToolBarGUI);
+            }
+            else if (!show && window != null)
+            {
+                ToolbarExtender.LeftToolbarGUI.Remove(window.OnToolBarGUI);
+                window = null;
+            }
         }
     }
 
@@ -129,12 +98,9 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
         private string[] repositoryPaths = new string[0];
         private int selectedRepositoryIndex = 0;
 
-        private GUIContent tortoiseIcon;
         private GUIContent logIcon;
         private GUIContent fetchIcon;
         private GUIContent commitIcon;
-
-        private GUILayoutOption repoDropdownMinWidth;
 
         // .. INITIALIZATION
 
@@ -148,19 +114,15 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
         {
             var add = EditorGUIUtility.isProSkin ? "_Light" : "";
             
-            var tortoiseTex = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + "TortoiseGit.png", typeof(Texture2D));
             var logTex = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + $"Search{add}.png", typeof(Texture2D));
             var fetchTex = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + $"Sync{add}.png", typeof(Texture2D));
             var commitTex = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + $"Upload{add}.png", typeof(Texture2D));
 
-            tortoiseIcon = new GUIContent(tortoiseTex, "TortoiseGitForUnity");
             logIcon = new GUIContent(logTex, "Log");
             fetchIcon = new GUIContent(fetchTex, "Fetch");
             commitIcon = new GUIContent(commitTex, "Commit");
 
-            repoDropdownMinWidth = GUILayout.Width(20);
-            
-            Debug.Log("TortoiseGit Resources Initialized");
+            //Debug.Log("TortoiseGit Resources Initialized");
         }
 
         private void RefreshRepositories()
@@ -209,44 +171,31 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
 
         public void OnToolBarGUI()
         {
-            GUILayout.Space(10);
+            GUILayout.Space(35);
 
-            GUILayout.Label(tortoiseIcon, ToolbarStyles.commandLabelStyle);
+            GUILayout.BeginVertical();
+            GUILayout.Space(-4);
+            GUILayout.BeginHorizontal();
 
-            if (GUILayout.Button(logIcon, ToolbarStyles.commandButtonStyleLeft))
+            if (GUILayout.Button(logIcon, ToolbarStyles.CommandButtonStyleLeft))
                 ExecuteCommand(TortoiseGitRunner.Command.Log);
-            if (GUILayout.Button(commitIcon, ToolbarStyles.commandButtonStyleMid))
+            if (GUILayout.Button(commitIcon, ToolbarStyles.CommandButtonStyleMid))
                 ExecuteCommand(TortoiseGitRunner.Command.Commit);
-            if (GUILayout.Button(fetchIcon, ToolbarStyles.commandButtonStyleMid))
+            if (GUILayout.Button(fetchIcon, ToolbarStyles.CommandButtonStyleRight))
                 ExecuteCommand(TortoiseGitRunner.Command.Fetch);
 
-            selectedRepositoryIndex = EditorGUILayout.Popup( "", selectedRepositoryIndex, repositoryPaths, ToolbarStyles.commandMiniPopupStyle);
+            GUILayout.Space(-3);
+
+            GUILayout.BeginVertical();
+            GUILayout.Space(4);
+            selectedRepositoryIndex = EditorGUILayout.Popup( "", selectedRepositoryIndex, repositoryPaths, ToolbarStyles.CommandMiniPopupStyle);
+            GUILayout.EndVertical();
+            
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
             
             GUILayout.FlexibleSpace();
         }
-
-        void OnGUI()
-        {
-            /*if(GUILayout.Button("test"))
-                RefreshRepositories();*/
-
-            GUILayout.Space(10);
-            GUILayout.BeginHorizontal();
-
-            
-
-            /*
-            
-            if (GUILayout.Button(logIcon, btnWidth, btnHeight))
-                ExecuteCommand(TortoiseGitRunner.Command.Log);
-            if (GUILayout.Button(commitIcon, btnWidth, btnHeight))
-                ExecuteCommand(TortoiseGitRunner.Command.Commit);
-            if (GUILayout.Button(fetchIcon, btnWidth, btnHeight))
-                ExecuteCommand(TortoiseGitRunner.Command.Fetch);
-            */
-            GUILayout.EndHorizontal();
-        }
-
 
         private List<string> GetAllSubDirs(string dir)
         {

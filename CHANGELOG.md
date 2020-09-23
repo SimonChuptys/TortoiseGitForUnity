@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this package will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [1.0.2] - 2020-09-23
+### Changed
+- TortoiseGitForUnity is now a toolbar instead of an EditorWindow
+- TortoiseGitForUnity can now be optionally loaded by the user
+### Fixes
+- Fixed repository discovery being called on every compile
+
 ## [1.0.1] - 2020-09-08
 ### Fixes
 - Fixed repository discovery on Unity Editor restart
