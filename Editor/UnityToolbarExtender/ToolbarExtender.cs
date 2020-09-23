@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityToolbarExtender
+namespace Vintecc.TortoiseGitForUnity.UnityToolbarExtender
 {
 	[InitializeOnLoad]
 	public static class ToolbarExtender

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityToolbarExtender;
+using Vintecc.TortoiseGitForUnity.UnityToolbarExtender;
 
 namespace Vintecc.TortoiseGitForUnity.UserInterface
 {
