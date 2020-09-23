@@ -2,11 +2,18 @@
   "name": "com.vintecc.tortoisegit-for-unity",
   "version": "1.0.3",
   "displayName": "TortoiseGit for Unity",
-  "description": "This package extends the Unity Editor with function calls to TortoiseGit.\n\nCall TortoiseGitForUnityLoader.InitializeDefault() from InitializeOnLoad to get started!\nUse TortoiseGitForUnityLoader.IsVisible to control toolbar visibility.",
+  "description": "This package extends the Unity Editor with function calls to TortoiseGit.",
   "author": {
     "name": "Vintecc",
     "email": "support@vintecc.com",
     "url": "https://www.vintecc.com"
   },
-  "hideInEditor": false
+  "hideInEditor": false,
+  "samples": [
+    {
+      "displayName": "Default Initialization",
+      "description": "A script to initialize TortoiseGitForUnity and add a toggle to the 'Tools' menu.",
+      "path": "Samples~/DefaultInitialization"
+    }
+  ]
 }
