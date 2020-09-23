@@ -9,6 +9,11 @@ namespace Vintecc.TortoiseGitForUnity
 
         // .. OPERATIONS
 
+        /// <summary>
+        /// Execute a git command on specified repository
+        /// </summary>
+        /// <param name="cmd">The command to execute</param>
+        /// <param name="path">The repository path</param>
         public static void Do(Command cmd, string path)
         {
             RunExecutable(TortoiseGitProcPath, "/command:" + cmd.ToString().ToLower() + " /path:\"" + path);

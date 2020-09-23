@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using Vintecc.TortoiseGitForUnity.UnityToolbarExtender;
 
-namespace Vintecc.TortoiseGitForUnity.UserInterface
+namespace Vintecc.TortoiseGitForUnity
 {
     static class ToolbarStyles
     {
@@ -49,37 +49,54 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
     {
         // .. FIELDS
 
-        private static bool show;
+        private const string TortoiseGitForUnityEnabledKey = "TortoiseGitForUnityEnabled";
+
+        public static bool IsVisible
+        {
+            get => EditorPrefs.GetBool(TortoiseGitForUnityEnabledKey, false);
+            set
+            {
+                EditorPrefs.SetBool(TortoiseGitForUnityEnabledKey, value);
+                UpdateVisibility();
+            }
+        }
+        
         private static TortoiseGitForUnityWindow window;
 
+        // .. INITIALIZATION
+
+        /// <summary>
+        /// Call from InitializeOnLoad to initialize TortoiseGitForUnity 
+        /// </summary>
+        public static void InitializeDefaults()
+        {
+            UpdateVisibility();
+        }
+        
         // .. OPERATIONS
 
         /// <summary>
-        /// Load and display TortoiseGitForUnity
+        /// Toggle the TortoiseGitForUnity toolbar on/off
         /// </summary>
-        public static void Show()
+        /// <returns>Whether to toolbar is currently toggled on</returns>
+        public static bool ToggleEnabled()
         {
-            show = true;
-            UpdateVisibility();
-        }
-
-        /// <summary>
-        /// Hide and unload TortoiseGitForUnity
-        /// </summary>
-        public static void Hide()
-        {
-            show = false;
-            UpdateVisibility();
+            var isVisible = !IsVisible;
+            IsVisible = isVisible;
+            return isVisible;
         }
         
         private static void UpdateVisibility()
         {
-            if (show && window == null)
+            var isVisible = IsVisible;
+            var isWindowNull = window == null;
+            
+            if (isVisible && isWindowNull)
             {
                 window = new TortoiseGitForUnityWindow();
                 ToolbarExtender.LeftToolbarGUI.Add(window.OnToolBarGUI);
             }
-            else if (!show && window != null)
+            else if (!isVisible && !isWindowNull)
             {
                 ToolbarExtender.LeftToolbarGUI.Remove(window.OnToolBarGUI);
                 window = null;
@@ -87,7 +104,7 @@ namespace Vintecc.TortoiseGitForUnity.UserInterface
         }
     }
 
-    public class TortoiseGitForUnityWindow
+    internal class TortoiseGitForUnityWindow
     {
         // .. FIELDS
 
