@@ -13,7 +13,7 @@ namespace Vintecc.TortoiseGitForUnity
         public static readonly GUIStyle CommandButtonStyleLeft;
         public static readonly GUIStyle CommandButtonStyleRight;
         public static readonly GUIStyle CommandMiniPopupStyle;
-        
+
         private const float Height = 20;
         private const float Width = 34;
         private const int Padding = 3;
@@ -25,9 +25,8 @@ namespace Vintecc.TortoiseGitForUnity
             CommandButtonStyleMid = new GUIStyle("AppCommandMid")
             {
                 padding = pd,
-                
             };
-            
+
             CommandButtonStyleLeft = new GUIStyle("AppCommandLeft")
             {
                 padding = pd,
@@ -36,8 +35,8 @@ namespace Vintecc.TortoiseGitForUnity
             {
                 padding = pd,
             };
-            
-            CommandMiniPopupStyle = new GUIStyle(/*EditorStyles.toolbarPopup*/"DropDown")
+
+            CommandMiniPopupStyle = new GUIStyle( /*EditorStyles.toolbarPopup*/"DropDown")
             {
                 fixedHeight = 22,
                 fixedWidth = 20,
@@ -60,7 +59,7 @@ namespace Vintecc.TortoiseGitForUnity
                 UpdateVisibility();
             }
         }
-        
+
         private static TortoiseGitForUnityToolbar window;
 
         // .. INITIALIZATION
@@ -72,7 +71,7 @@ namespace Vintecc.TortoiseGitForUnity
         {
             UpdateVisibility();
         }
-        
+
         // .. OPERATIONS
 
         /// <summary>
@@ -85,12 +84,12 @@ namespace Vintecc.TortoiseGitForUnity
             IsVisible = isVisible;
             return isVisible;
         }
-        
+
         private static void UpdateVisibility()
         {
             var isVisible = IsVisible;
             var isWindowNull = window == null;
-            
+
             if (isVisible && isWindowNull)
             {
                 window = new TortoiseGitForUnityToolbar();
@@ -130,7 +129,7 @@ namespace Vintecc.TortoiseGitForUnity
         private void InitResources()
         {
             var add = EditorGUIUtility.isProSkin ? "_Light" : "";
-            
+
             var logTex = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + $"Search{add}.png", typeof(Texture2D));
             var fetchTex = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + $"Sync{add}.png", typeof(Texture2D));
             var commitTex = (Texture2D) AssetDatabase.LoadAssetAtPath(AssetPath + $"Upload{add}.png", typeof(Texture2D));
@@ -142,11 +141,11 @@ namespace Vintecc.TortoiseGitForUnity
             //Debug.Log("TortoiseGit Resources Initialized");
         }
 
-        private void RefreshRepositories()
+        private void RefreshRepositories(bool force = false)
         {
             var storedRepos = PlayerPrefs.GetString(RepositoryListKey, string.Empty);
 
-            if (string.IsNullOrEmpty(storedRepos))
+            if (force || string.IsNullOrEmpty(storedRepos))
             {
                 Debug.Log("[TortoiseGitForUnity] Scanning for repositories.");
                 var unityProjectDir = Directory.GetCurrentDirectory();
@@ -175,13 +174,16 @@ namespace Vintecc.TortoiseGitForUnity
                 PlayerPrefs.SetString(RepositoryListKey, storedRepos);
             }
 
+            const string refreshRepos = "Scan for repositories...";
             if (storedRepos == NoReposValue)
             {
-                repositoryPaths = new string[0];
+                repositoryPaths = new string[] {refreshRepos};
                 return;
             }
-
-            repositoryPaths = storedRepos.Split(';').Where(e => !string.IsNullOrEmpty(e)).ToArray();
+            
+            var repos = storedRepos.Split(';').Where(e => !string.IsNullOrEmpty(e)).ToList();
+            repos.Add(refreshRepos);
+            repositoryPaths = repos.ToArray();
         }
 
         // .. OPERATIONS
@@ -205,12 +207,18 @@ namespace Vintecc.TortoiseGitForUnity
 
             GUILayout.BeginVertical();
             GUILayout.Space(4);
-            selectedRepositoryIndex = EditorGUILayout.Popup( "", selectedRepositoryIndex, repositoryPaths, ToolbarStyles.CommandMiniPopupStyle);
-            GUILayout.EndVertical();
+            selectedRepositoryIndex = EditorGUILayout.Popup("", selectedRepositoryIndex, repositoryPaths, ToolbarStyles.CommandMiniPopupStyle);
+            if (selectedRepositoryIndex == repositoryPaths.Length - 1)
+            {
+                RefreshRepositories(true);
+                selectedRepositoryIndex = 0;
+            }
             
+            GUILayout.EndVertical();
+
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
-            
+
             GUILayout.FlexibleSpace();
         }
 
