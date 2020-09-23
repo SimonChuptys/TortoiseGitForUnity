@@ -108,7 +108,7 @@ namespace Vintecc.TortoiseGitForUnity
         // .. FIELDS
 
         private const string RepositoryListKey = "TortoiseGitForUnityRepositories";
-        private const string NoReposValue = "No repos!";
+        private const string NoReposValue = "No repositories found!";
         private const string AssetPath = "Packages/com.vintecc.tortoisegit-for-unity/Editor Resources/";
 
         private string[] repositoryPaths = new string[0];

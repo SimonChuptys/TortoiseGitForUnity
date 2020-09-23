@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this package will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [1.0.5] - 2020-09-23
+### Fixes
+- Fixed incorrect repository scanning when using TortoiseGitForUnity in multiple projects
+
+## [1.0.4] - 2020-09-23
+### Added
+- Added sample code to initialize TortoiseGitForUnity
+
 ## [1.0.3] - 2020-09-23
 ### Changed
 - Simplified API
