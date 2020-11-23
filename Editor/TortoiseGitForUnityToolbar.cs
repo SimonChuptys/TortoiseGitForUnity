@@ -110,6 +110,7 @@ namespace Vintecc.TortoiseGitForUnity
         private const string RepositoryListKey = "TortoiseGitForUnityRepositories";
         private const string NoReposValue = "No repositories found!";
         private const string AssetPath = "Packages/com.vintecc.tortoisegit-for-unity/Editor Resources/";
+        private const string SettingsFileName = "tortoisegitforunity.settings";
 
         private string[] repositoryPaths = new string[0];
         private int selectedRepositoryIndex = 0;
@@ -143,12 +144,15 @@ namespace Vintecc.TortoiseGitForUnity
 
         private void RefreshRepositories(bool force = false)
         {
-            var storedRepos = PlayerPrefs.GetString(RepositoryListKey, string.Empty);
-
+            var unityProjectDir = Directory.GetCurrentDirectory();
+            var settingsFilePath = Path.Combine(unityProjectDir, SettingsFileName); 
+            
+            var storedRepos = File.Exists(settingsFilePath) ? File.ReadAllText(settingsFilePath) : string.Empty;
+            
             if (force || string.IsNullOrEmpty(storedRepos))
             {
                 Debug.Log("[TortoiseGitForUnity] Scanning for repositories.");
-                var unityProjectDir = Directory.GetCurrentDirectory();
+                
                 var pathsToCheck = new List<string>
                 {
                     Directory.GetParent(unityProjectDir).FullName, //unity project parent dir
@@ -171,7 +175,7 @@ namespace Vintecc.TortoiseGitForUnity
                 if (string.IsNullOrEmpty(storedRepos))
                     storedRepos = NoReposValue;
 
-                PlayerPrefs.SetString(RepositoryListKey, storedRepos);
+                File.WriteAllText(settingsFilePath, storedRepos);
             }
 
             const string refreshRepos = "Scan for repositories...";
