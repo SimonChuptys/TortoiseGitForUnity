@@ -152,7 +152,8 @@ namespace Vintecc.TortoiseGitForUnity
             if (force || string.IsNullOrEmpty(storedRepos))
             {
                 Debug.Log("[TortoiseGitForUnity] Scanning for repositories.");
-                
+
+                storedRepos = "";
                 var pathsToCheck = new List<string>
                 {
                     Directory.GetParent(unityProjectDir).FullName, //unity project parent dir

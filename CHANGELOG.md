@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this package will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [1.0.6] - 2021-02-23
+### Changed
+- Repository paths are now stored in a settings file
+### Fixes
+- Updating repository discovery now clears old discovered repository paths
+
 ## [1.0.5] - 2020-09-23
 ### Fixes
 - Fixed incorrect repository scanning when using TortoiseGitForUnity in multiple projects
